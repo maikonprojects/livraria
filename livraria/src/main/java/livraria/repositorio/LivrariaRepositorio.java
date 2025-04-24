@@ -1,0 +1,99 @@
+package livraria.repositorio;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
+import livraria.entidade.Eletronico;
+import livraria.entidade.Impresso;
+import livraria.entidade.Livro;
+import org.hibernate.boot.model.naming.ImplicitEntityNameSource;
+
+import java.util.List;
+
+public class LivrariaRepositorio {
+
+    EntityManagerFactory emf;
+    EntityManager em;
+
+    public LivrariaRepositorio() {
+        emf = Persistence.createEntityManagerFactory("livraria");
+        em = emf.createEntityManager();
+    }
+
+    public void atualizarEstoque(int codigo){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("SELECT i FROM Impresso i WHERE i.fkLivro = :idLivro");
+            consulta.setParameter("idLivro", codigo);
+            List<Impresso> impresso = consulta.getResultList();
+            Impresso livro = impresso.get(0);
+            int resultado =  livro.getEstoque();
+            int estoqueAtual = resultado - 1;
+            livro.setEstoque(estoqueAtual);
+            em.merge(livro);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+
+    }
+
+    public void addLivro(Livro livro){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(livro);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+    }
+
+    public void addLivroEletronico(Livro livro, Eletronico eletronico){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            eletronico.setLivro(livro);
+            em.persist(livro);
+            em.persist(eletronico);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+    }
+    public void addLivroImpressao(Livro livro, Impresso impresso){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            impresso.setLivro(livro);
+            em.persist(livro);
+            em.persist(impresso);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+    }
+
+    public List<Livro> listarLivro(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("select liv from Livro liv");
+            List<Livro> liv = consulta.getResultList();
+            em.getTransaction().commit();
+            return liv;
+        }finally {
+            em.close();
+        }
+    }
+
+
+
+
+
+
+
+
+}
