@@ -3,7 +3,8 @@ package livraria.entidade;
 import jakarta.persistence.*;
 
 @Entity
-public class Impresso{
+@DiscriminatorValue("Livro_impresso")
+public class Impresso extends Livro{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,23 +16,18 @@ public class Impresso{
     @Column
     private int estoque;
 
-    public Livro getLivro() {
-        return livro;
-    }
 
-    public void setLivro(Livro livro) {
-        this.livro = livro;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "fkLivro")
-    private Livro livro;
-
-    public Impresso(double frete, int estoque, Livro livro) {
-        this.frete = frete;
+    public Impresso(int estoque, double frete) {
         this.estoque = estoque;
-        this.livro = livro;
+        this.frete = frete;
     }
+
+    public Impresso(String autor, String titulo, String editora, double preco, int estoque, double frete) {
+        super(autor, titulo, editora, preco);
+        this.estoque = estoque;
+        this.frete = frete;
+    }
+
     public Impresso() {
 
     }
@@ -72,7 +68,6 @@ public class Impresso{
                 "id=" + id +
                 ", frete=" + frete +
                 ", estoque=" + estoque +
-                ", livro=" + livro +
                 '}';
     }
 }

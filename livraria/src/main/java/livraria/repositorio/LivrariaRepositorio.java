@@ -51,30 +51,6 @@ public class LivrariaRepositorio {
         }
     }
 
-    public void addLivroEletronico(Livro livro, Eletronico eletronico){
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            eletronico.setLivro(livro);
-            em.persist(livro);
-            em.persist(eletronico);
-            em.getTransaction().commit();
-        }finally {
-            em.close();
-        }
-    }
-    public void addLivroImpressao(Livro livro, Impresso impresso){
-        EntityManager em = emf.createEntityManager();
-        try {
-            em.getTransaction().begin();
-            impresso.setLivro(livro);
-            em.persist(livro);
-            em.persist(impresso);
-            em.getTransaction().commit();
-        }finally {
-            em.close();
-        }
-    }
 
     public List<Livro> listarLivro(){
         EntityManager em = emf.createEntityManager();
@@ -89,11 +65,6 @@ public class LivrariaRepositorio {
         }
     }
 
-
-
-
-
-
-
+    public void realizarVenda(Livro livro, int qtdLivros, )
 
 }
