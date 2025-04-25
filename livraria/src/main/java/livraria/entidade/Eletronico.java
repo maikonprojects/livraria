@@ -9,6 +9,7 @@ public class Eletronico extends Livro{
 
     private int tamanho;
 
+
     public Eletronico(String autor, String titulo, String editora, double preco, int tamanho) {
         super(autor, titulo, editora, preco);
         this.tamanho = tamanho;
@@ -33,9 +34,11 @@ public class Eletronico extends Livro{
 
     @Override
     public String toString() {
-        return "eletronico{" +
-                ", tamanho=" + tamanho +
-                '}';
+        return "Nome do livro: " + getTituloLivro() +
+                " Autor: " + getAutor() + "," +
+                " Editora: " + getEditora() + "," +
+                " Preço: " + getPreco() + "," +
+                " Tamanho do livro em KB: " + getTamanho() + " ";
     }
 
 }

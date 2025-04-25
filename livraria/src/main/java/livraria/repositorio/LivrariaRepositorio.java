@@ -7,6 +7,7 @@ import jakarta.persistence.Query;
 import livraria.entidade.Eletronico;
 import livraria.entidade.Impresso;
 import livraria.entidade.Livro;
+import livraria.entidade.Venda;
 import org.hibernate.boot.model.naming.ImplicitEntityNameSource;
 
 import java.util.List;
@@ -63,6 +64,61 @@ public class LivrariaRepositorio {
             em.close();
         }
     }
+
+    public void realizarVenda(Venda venda){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(venda);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+    }
+
+    public List<Livro> listarImpresso(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("select liv from Impresso liv");
+            List<Livro> liv = consulta.getResultList();
+            em.getTransaction().commit();
+            return liv;
+        }finally {
+            em.close();
+        }
+    }
+
+    public List<Livro> listarEletronico(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("select liv from Eletronico liv");
+            List<Livro> liv = consulta.getResultList();
+            em.getTransaction().commit();
+            return liv;
+        }finally {
+            em.close();
+        }
+    }
+
+    public List<Venda> listarVendas(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("SELECT DISTINCT v FROM Venda v JOIN FETCH v.livro");
+            List<Venda> vendas = consulta.getResultList();
+            em.getTransaction().commit();
+            return vendas;
+        }finally {
+            em.close();
+        }
+    }
+
+
+
+
+
 
 
 
