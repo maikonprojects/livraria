@@ -3,7 +3,7 @@ package livraria.entidade;
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)  // ou JOINED
+@Inheritance(strategy = InheritanceType.JOINED)  // ou JOINED
 @DiscriminatorColumn(name = "DTYPE")
 public class Livro {
 

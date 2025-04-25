@@ -3,17 +3,14 @@ package livraria.entidade;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("Livro_elotronico")
+@DiscriminatorValue("livro_eletronico")
 public class Eletronico extends Livro{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
 
     private int tamanho;
 
-    public Eletronico() {}
-
-    public Eletronico(Livro livro, int tamanho) {
+    public Eletronico(String autor, String titulo, String editora, double preco, int tamanho) {
+        super(autor, titulo, editora, preco);
         this.tamanho = tamanho;
     }
 
@@ -21,14 +18,13 @@ public class Eletronico extends Livro{
         this.tamanho = tamanho;
     }
 
-    public Eletronico(String autor, String titulo, String editora, double preco, int tamanho) {
-        super(autor, titulo, editora, preco);
-        this.tamanho = tamanho;
-    }
+    public Eletronico() {}
+
 
     public int getTamanho() {
         return tamanho;
     }
+
 
     public void setTamanho(int tamanho) {
         this.tamanho = tamanho;

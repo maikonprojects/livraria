@@ -11,13 +11,12 @@ public class Main {
         LivrariaRepositorio repLivro = new LivrariaRepositorio();
         //repLivro.atualizarEstoque(2);
 
-        Eletronico livro = new Eletronico("Rafael Montes", "Jantar secreto", "Galera Record", 40.00, 145);
-        Impresso livroImpresso = new Impresso("Collen Hoover", "É assim que acaba", "Galera Record", 50.00, 12, 2);
+        Eletronico livro = new Eletronico("Collen Hoover", "É assim que acaba", "Galera Record", 50.00, 10);
+        Impresso livroImpresso = new Impresso("Collen Hoover", "É assim que acaba", "Galera Record", 50.00, 10, 10);
 
         repLivro.addLivro(livroImpresso);
-        repLivro.addLivro(livro);
-//        repLivro.addLivroEletronico(livro, livroEletronico);
-//        System.out.println(repLivro.listarLivro().toString());
+        //        repLivro.addLivroEletronico(livro, livroEletronico);
+        //        System.out.println(repLivro.listarLivro().toString());
 
 
 

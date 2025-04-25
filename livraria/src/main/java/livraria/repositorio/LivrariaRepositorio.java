@@ -51,7 +51,6 @@ public class LivrariaRepositorio {
         }
     }
 
-
     public List<Livro> listarLivro(){
         EntityManager em = emf.createEntityManager();
         try {
@@ -65,6 +64,11 @@ public class LivrariaRepositorio {
         }
     }
 
-    public void realizarVenda(Livro livro, int qtdLivros, )
+
+
+
+
+
+
 
 }

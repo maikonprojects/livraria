@@ -3,12 +3,8 @@ package livraria.entidade;
 import jakarta.persistence.*;
 
 @Entity
-@DiscriminatorValue("Livro_impresso")
+@DiscriminatorValue("livro_impresso")
 public class Impresso extends Livro{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
     @Column
     private double frete;
@@ -16,27 +12,22 @@ public class Impresso extends Livro{
     @Column
     private int estoque;
 
-
-    public Impresso(int estoque, double frete) {
-        this.estoque = estoque;
+    public Impresso(double frete, int estoque) {
         this.frete = frete;
+        this.estoque = estoque;
     }
 
-    public Impresso(String autor, String titulo, String editora, double preco, int estoque, double frete) {
+    public Impresso(String autor, String titulo, String editora, double preco, double frete, int estoque) {
         super(autor, titulo, editora, preco);
-        this.estoque = estoque;
         this.frete = frete;
-    }
-
-    public Impresso() {
-
+        this.estoque = estoque;
     }
 
 //    public Impresso(String autor, String tituloLivro, String editora, double preco, double frete, int estoque) {
-//        super(autor, tituloLivro, editora, preco);
-//        this.frete = frete;
-//        this.estoque = estoque;
-//    }
+    //        super(autor, tituloLivro, editora, preco);
+    //        this.frete = frete;
+    //        this.estoque = estoque;
+    //    }
 
     public double getFrete() {
         return frete;
@@ -46,13 +37,6 @@ public class Impresso extends Livro{
         this.frete = frete;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getEstoque() {
         return estoque;
@@ -65,8 +49,7 @@ public class Impresso extends Livro{
     @Override
     public String toString() {
         return "Impresso{" +
-                "id=" + id +
-                ", frete=" + frete +
+                "frete=" + frete +
                 ", estoque=" + estoque +
                 '}';
     }

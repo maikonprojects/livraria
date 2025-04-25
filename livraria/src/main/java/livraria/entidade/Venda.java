@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "venda")
-public class Venda extends Livro{
+public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column
+    private int fkLivro;
 
     @Column
     private int numVendas;
@@ -16,26 +19,19 @@ public class Venda extends Livro{
     @Column
     private int numero;
 
-    public Venda(int numVendas, int numero, String cliente, double valor) {
-        this.numVendas = numVendas;
-        this.numero = numero;
-        this.cliente = cliente;
-        this.valor = valor;
-    }
-
-    public Venda(String autor, String titulo, String editora, double preco, int numVendas, int numero, String cliente, double valor) {
-        super(autor, titulo, editora, preco);
-        this.numVendas = numVendas;
-        this.numero = numero;
-        this.cliente = cliente;
-        this.valor = valor;
-    }
-
     @Column
     private String cliente;
 
     @Column
     private double valor;
+
+    public int getFkLivro() {
+        return fkLivro;
+    }
+
+    public void setFkLivro(int fkLivro) {
+        this.fkLivro = fkLivro;
+    }
 
     public int getNumVendas() {
         return numVendas;
