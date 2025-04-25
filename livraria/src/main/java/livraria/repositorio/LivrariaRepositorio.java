@@ -115,16 +115,42 @@ public class LivrariaRepositorio {
         }
     }
 
+    public Eletronico obterPorIdEletronico(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Eletronico gerenciado = em.find(Eletronico.class, id);
+            em.getTransaction().commit();
+            return gerenciado;
+        } finally {
+            em.close();
+        }
 
+    }
 
+    public Impresso obterPorIdImpresso(int id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Impresso gerenciado = em.find(Impresso.class, id);
+            em.getTransaction().commit();
+            return gerenciado;
+        } finally {
+            em.close();
+        }
 
+    }
 
-
-
-
-
-
-
-
-
+    public int pegarNumVendas(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("SELECT MAX(v.numVendas) FROM Venda v");
+            List liv = consulta.getResultList();
+            em.getTransaction().commit();
+            return (int) liv.getFirst();
+        }finally {
+            em.close();
+        }
+    }
 }

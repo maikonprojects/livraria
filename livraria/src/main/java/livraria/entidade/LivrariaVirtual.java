@@ -1,6 +1,9 @@
 package livraria.entidade;
 
 import jakarta.persistence.*;
+import livraria.repositorio.LivrariaRepositorio;
+
+import java.util.Scanner;
 
 @Entity
 @Table(name = "livrariaVirtual")
@@ -119,5 +122,41 @@ public class LivrariaVirtual {
         this.fkVendas = fkVendas;
     }
 
+    public void cadastrarLivro(){
+
+        Scanner sc = new Scanner(System.in);
+        LivrariaRepositorio repositorio = new LivrariaRepositorio();
+
+        System.out.println("\n--- Cadastrar Livro ---");
+        System.out.print("Título: ");
+        String titulo = sc.nextLine();
+        System.out.print("Autor(es): ");
+        String autor = sc.nextLine();
+        System.out.print("Editora: ");
+        String editora = sc.nextLine();
+        System.out.print("Preço: ");
+        double preco = Double.parseDouble(sc.nextLine());
+        System.out.print("Tipo do livro (impresso) ou (eletronico): ");
+        String tipoLivro = sc.nextLine();
+
+
+        if(tipoLivro.toLowerCase().equalsIgnoreCase("impresso")){
+
+            System.out.print("Preço do frete: ");
+            double frete = Double.parseDouble(sc.nextLine());
+
+            System.out.print("Estoque: ");
+            int estoque = Integer.parseInt(sc.nextLine());
+
+            repositorio.addLivro(new Impresso(autor, titulo, editora, preco, frete, estoque));
+        }else {
+
+            System.out.println("Tamanho KB: ");
+            int kb = Integer.parseInt(sc.nextLine());
+
+            repositorio.addLivro(new Eletronico(autor, titulo, editora, preco, kb));
+        }
+
+    }
 
 }
