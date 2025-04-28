@@ -3,123 +3,47 @@ package livraria.entidade;
 import jakarta.persistence.*;
 import livraria.repositorio.LivrariaRepositorio;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-@Entity
-@Table(name = "livrariaVirtual")
+
 public class LivrariaVirtual {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int maxImpressos = 10;
 
-    @Column
-    private int maxImpressoras;
+    private int maxEletronicos = 20;
 
-    @Column
-    private int maxEletronicos;
+    private int maxVendas = 50;
 
-    @Column
-    private int maxVendas;
-
-    @Column
-    private int fkImpressos;
-
-    @Column
-    private int fkEletronicos;
-
-    @Column
-    private int fkVendas;
-
-    @Column
     private int numImpressos;
 
-    @Column
     private int numEletronicos;
 
-    @Column
     private int numVendas;
-
-
-
-    public int getNumImpressos() {
-        return numImpressos;
-    }
 
     public void setNumImpressos(int numImpressos) {
         this.numImpressos = numImpressos;
-    }
-
-    public int getNumEletronicos() {
-        return numEletronicos;
     }
 
     public void setNumEletronicos(int numEletronicos) {
         this.numEletronicos = numEletronicos;
     }
 
-    public int getNumVendas() {
-        return numVendas;
-    }
-
     public void setNumVendas(int numVendas) {
         this.numVendas = numVendas;
     }
 
-    public int getId() {
-        return id;
+    public int getNumImpressos() {
+        return numImpressos;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getNumEletronicos() {
+        return numEletronicos;
     }
 
-    public int getMaxImpressoras() {
-        return maxImpressoras;
-    }
-
-    public void setMaxImpressoras(int maxImpressoras) {
-        this.maxImpressoras = maxImpressoras;
-    }
-
-    public int getMaxEletronicos() {
-        return maxEletronicos;
-    }
-
-    public void setMaxEletronicos(int maxEletronicos) {
-        this.maxEletronicos = maxEletronicos;
-    }
-
-    public int getFkImpressos() {
-        return fkImpressos;
-    }
-
-    public void setFkImpressos(int fkImpressos) {
-        this.fkImpressos = fkImpressos;
-    }
-
-    public int getMaxVendas() {
-        return maxVendas;
-    }
-
-    public void setMaxVendas(int maxVendas) {
-        this.maxVendas = maxVendas;
-    }
-
-    public int getFkEletronicos() {
-        return fkEletronicos;
-    }
-
-    public void setFkEletronicos(int fkEletronicos) {
-        this.fkEletronicos = fkEletronicos;
-    }
-
-    public int getFkVendas() {
-        return fkVendas;
-    }
-
-    public void setFkVendas(int fkVendas) {
-        this.fkVendas = fkVendas;
+    public int getNumVendas() {
+        return numVendas;
     }
 
     public void cadastrarLivro(){
@@ -148,15 +72,127 @@ public class LivrariaVirtual {
             System.out.print("Estoque: ");
             int estoque = Integer.parseInt(sc.nextLine());
 
-            repositorio.addLivro(new Impresso(autor, titulo, editora, preco, frete, estoque));
+
+            if (numImpressos < maxImpressos) {
+                repositorio.addLivro(new Impresso(autor, titulo, editora, preco, frete, estoque));
+                numImpressos++;
+            }else {
+                System.out.print("Número máximo de livros impressos cadastrados!");
+            }
+
+
         }else {
 
-            System.out.println("Tamanho KB: ");
+            System.out.print("Tamanho KB: ");
             int kb = Integer.parseInt(sc.nextLine());
 
-            repositorio.addLivro(new Eletronico(autor, titulo, editora, preco, kb));
+            if (numEletronicos < maxEletronicos) {
+                repositorio.addLivro(new Eletronico(autor, titulo, editora, preco, kb));
+                numEletronicos++;
+            }else {
+                System.out.println("Número máximo de livros impressos cadastrados!");
+            }
+
         }
 
+    }
+
+    public void realizarVenda(){
+
+        Scanner sc = new Scanner(System.in);
+        LivrariaRepositorio repositorio = new LivrariaRepositorio();
+
+
+        System.out.println("\n--- Realizar Venda ---");
+        System.out.print("Nome do cliente: ");
+        String cliente = sc.nextLine();
+
+        System.out.print("Quantidade de Livros: ");
+        int quantidade = Integer.parseInt(sc.nextLine());
+
+        List<Livro> listaPrincipal = new ArrayList<>();
+
+        for (int i = 0; i < quantidade; i++) {
+            System.out.print("Tipo do livro: ");
+            String tipoLivroUsuario = sc.nextLine();
+
+            if (tipoLivroUsuario.equalsIgnoreCase("eletronico")){
+
+                List<Eletronico> listaEletronico = repositorio.listarEletronico();
+
+                for (int j = 0; j < repositorio.listarEletronico().size(); j++) {
+                    System.out.println("Id: " + listaEletronico.get(j).getId() + ", Nome do livro: " + listaEletronico.get(j).getTituloLivro() + ", Autor: " + listaEletronico.get(j).getAutor() + ", Editora " + listaEletronico.get(j).getEditora() + ", Preço: " + listaEletronico.get(j).getPreco() + ", Tamanho KB: " + listaEletronico.get(j).getTamanho() );
+                }
+
+                System.out.println("Digite o número do livro que deseja comprar: ");
+                int numCompraEletronico = Integer.parseInt(sc.nextLine());
+
+                Eletronico eletronico = repositorio.obterPorIdEletronico(numCompraEletronico);
+                listaPrincipal.add(eletronico);
+
+            } else if (tipoLivroUsuario.equalsIgnoreCase("impresso")) {
+                List<Impresso> listaImpresso= repositorio.listarImpresso();
+
+
+                for (int j = 0; j < repositorio.listarImpresso().size(); j++) {
+                    System.out.println("Id: " + listaImpresso.get(j).getId() + ", Nome do livro: " + listaImpresso.get(j).getTituloLivro() + ", Autor: " + listaImpresso.get(j).getAutor() + ", Editora " + listaImpresso.get(j).getEditora() + ", Preço: " + listaImpresso.get(j).getPreco() + ", Frete: " + listaImpresso.get(j).getFrete() + ", Estoque: " + listaImpresso.get(j).getEstoque() );
+                }
+
+
+                System.out.print("Digite o número do livro que deseja comprar: ");
+                int numCompraImpresso = Integer.parseInt(sc.nextLine());
+
+                Impresso impresso = repositorio.obterPorIdImpresso(numCompraImpresso);
+                listaPrincipal.add(impresso);
+
+                repositorio.atualizarEstoque(numCompraImpresso);
+
+            }else {
+                System.out.println("Valor inválido!");
+                i--;
+            }
+
+
+        }
+
+        if(numVendas < maxVendas){
+            Long repositorioVenda = repositorio.pegarNumVendas();
+            int codigoVenda = repositorio.gerarValorUnico(Math.toIntExact(repositorioVenda));
+            Venda vendaLivros = new Venda(listaPrincipal, Math.toIntExact(repositorioVenda), cliente, codigoVenda, listaPrincipal.getFirst().getPreco());
+            repositorio.realizarVenda(vendaLivros);
+            numVendas++;
+        }else {
+            System.out.println("Número de vendas máximas alccançadas");
+        }
+
+    };
+
+    public void listarlivros(){
+
+        LivrariaRepositorio repositorio = new LivrariaRepositorio();
+
+        List<Eletronico> listaEletronico = repositorio.listarEletronico();
+        for (int j = 0; j < repositorio.listarEletronico().size(); j++) {
+            System.out.println("Id: " + listaEletronico.get(j).getId() + ", Nome do livro: " + listaEletronico.get(j).getTituloLivro() + ", Autor: " + listaEletronico.get(j).getAutor() + ", Editora " + listaEletronico.get(j).getEditora() + ", Preço: " + listaEletronico.get(j).getPreco() + ", Tamanho KB: " + listaEletronico.get(j).getTamanho() );
+        }
+        List<Impresso> listaImpresso= repositorio.listarImpresso();
+        for (int j = 0; j < repositorio.listarImpresso().size(); j++) {
+            System.out.println("Id: " + listaImpresso.get(j).getId() + ", Nome do livro: " + listaImpresso.get(j).getTituloLivro() + ", Autor: " + listaImpresso.get(j).getAutor() + ", Editora " + listaImpresso.get(j).getEditora() + ", Preço: " + listaImpresso.get(j).getPreco() + ", Frete: " + listaImpresso.get(j).getFrete() + ", Estoque: " + listaImpresso.get(j).getEstoque() );
+        }
+    }
+
+    public void listarVendas(){
+        LivrariaRepositorio repositorio = new LivrariaRepositorio();
+
+        List<Venda> vendas = repositorio.listarVendas();
+
+        for (Venda v : vendas) {
+            System.out.println("\nVenda #" + v.getNumero() + " | Cliente: " + v.getCliente());
+            System.out.println("Livros:");
+            for (Livro l : v.getLivro()) {
+                System.out.println("→ " + l.getTituloLivro() + " | Autor: " + l.getAutor());
+            }
+        }
     }
 
 }

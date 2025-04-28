@@ -8,7 +8,6 @@ import livraria.entidade.Eletronico;
 import livraria.entidade.Impresso;
 import livraria.entidade.Livro;
 import livraria.entidade.Venda;
-import org.hibernate.boot.model.naming.ImplicitEntityNameSource;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class LivrariaRepositorio {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Query consulta = em.createQuery("SELECT i FROM Impresso i WHERE i.fkLivro = :idLivro");
+            Query consulta = em.createQuery("SELECT i FROM Impresso i WHERE i.id = :idLivro");
             consulta.setParameter("idLivro", codigo);
             List<Impresso> impresso = consulta.getResultList();
             Impresso livro = impresso.get(0);
@@ -76,12 +75,12 @@ public class LivrariaRepositorio {
         }
     }
 
-    public List<Livro> listarImpresso(){
+    public List<Impresso> listarImpresso(){
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Query consulta = em.createQuery("select liv from Impresso liv");
-            List<Livro> liv = consulta.getResultList();
+            List<Impresso> liv = consulta.getResultList();
             em.getTransaction().commit();
             return liv;
         }finally {
@@ -89,12 +88,12 @@ public class LivrariaRepositorio {
         }
     }
 
-    public List<Livro> listarEletronico(){
+    public List<Eletronico> listarEletronico(){
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             Query consulta = em.createQuery("select liv from Eletronico liv");
-            List<Livro> liv = consulta.getResultList();
+            List<Eletronico> liv = consulta.getResultList();
             em.getTransaction().commit();
             return liv;
         }finally {
@@ -125,7 +124,6 @@ public class LivrariaRepositorio {
         } finally {
             em.close();
         }
-
     }
 
     public Impresso obterPorIdImpresso(int id) {
@@ -138,19 +136,58 @@ public class LivrariaRepositorio {
         } finally {
             em.close();
         }
-
     }
 
-    public int pegarNumVendas(){
+    public Long pegarNumVendas(){
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Query consulta = em.createQuery("SELECT MAX(v.numVendas) FROM Venda v");
-            List liv = consulta.getResultList();
+            Query consulta = em.createQuery(
+                    "SELECT COUNT(v) FROM Venda v"
+            );
+            consulta.setMaxResults(1);
+            Long maiorNumero = (Long) consulta.getSingleResult();
             em.getTransaction().commit();
-            return (int) liv.getFirst();
+            return maiorNumero;
         }finally {
             em.close();
         }
     }
+
+    public int gerarValorUnico(int x) {
+        if (x < 1) throw new IllegalArgumentException("X deve ser maior que 1");
+        long valorUnico = (x * System.nanoTime()) % Integer.MAX_VALUE;
+        return (int) valorUnico;
+    }
+
+
+    public Long pegarNumImpresso(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery(
+                    "SELECT COUNT(v) FROM Impresso v"
+            );
+            consulta.setMaxResults(1);
+            Long numTotal = (Long) consulta.getSingleResult();
+            em.getTransaction().commit();
+            return numTotal;
+        }finally {
+            em.close();
+        }
+    }
+
+    public Long pegarNumEletronico(){
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Query consulta = em.createQuery("SELECT COUNT(v) FROM Eletronico v");
+            Long numTotal = (Long) consulta.getSingleResult();
+            em.getTransaction().commit();
+            return numTotal;
+        }finally {
+            em.close();
+        }
+    }
+
 }
