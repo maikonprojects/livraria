@@ -155,8 +155,8 @@ public class LivrariaRepositorio {
     }
 
     public int gerarValorUnico(int x) {
-        if (x < 1) throw new IllegalArgumentException("X deve ser maior que 1");
-        long valorUnico = (x * System.nanoTime()) % Integer.MAX_VALUE;
+        if ((x + 1) < 1) throw new IllegalArgumentException("X deve ser maior que 1");
+        long valorUnico = ((x + 1) * System.nanoTime()) % Integer.MAX_VALUE;
         return (int) valorUnico;
     }
 
